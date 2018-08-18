@@ -40,7 +40,7 @@ export const statechart = {
           initial: "carrierSelection",
           states: {
             carrierSelection: {
-              onEntry: "FETCH_CARRIERS",
+              onEntry: "fetchCarriers",
               on: {
                 CARRIER_SELECTED: "planSelection"
               },
@@ -61,7 +61,7 @@ export const statechart = {
               }
             },
             planSelection: {
-              onEntry: "FETCH_PLANS",
+              onEntry: "fetchPlans",
               on: {
                 PLAN_SELECTED: "resetInsuranceQuestion"
               },
