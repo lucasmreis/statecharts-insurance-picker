@@ -17,9 +17,10 @@ const plans = [
 ];
 
 function fetchList(list) {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(list), 1000);
-  });
+  return () =>
+    new Promise(resolve => {
+      setTimeout(() => resolve(list), 1000);
+    });
 }
 
 const fetchCarriers = fetchList(carriers);

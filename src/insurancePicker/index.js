@@ -7,10 +7,10 @@ import { InsuranceList } from "./InsuranceList";
 
 class Container extends React.Component {
   state = {
-    carriers: [],
-    plans: [],
     selectedCarrier: null,
-    selectedPlan: null
+    selectedPlan: null,
+    carriers: [],
+    plans: []
   };
 
   fetchCarriers() {
@@ -21,7 +21,10 @@ class Container extends React.Component {
   }
 
   fetchPlans() {
-    // fetchPlans(this.state.selectedCarrier);
+    fetchPlans(this.state.selectedCarrier)
+      .then(plans => this.setState({ plans }))
+      .then(() => this.props.transition("PLANS_FETCHED"))
+      .catch(() => this.props.transition("FETCH_PLANS_ERROR"));
   }
 
   selectCarrier = selectedCarrier => {
@@ -29,8 +32,13 @@ class Container extends React.Component {
     this.props.transition("CARRIER_SELECTED");
   };
 
+  selectPlan = selectedPlan => {
+    this.setState({ selectedPlan });
+    this.props.transition("PLAN_SELECTED");
+  };
+
   render() {
-    const { carriers, selectedCarrier, selectedPlan } = this.state;
+    const { carriers, plans, selectedCarrier, selectedPlan } = this.state;
 
     const selectedInsurance = [selectedCarrier, selectedPlan]
       .filter(Boolean)
@@ -42,19 +50,24 @@ class Container extends React.Component {
           value={selectedInsurance}
           onClick={() => this.props.transition("INPUT_CLICKED")}
         />
+
         <State is="menu.visibility.shown">
           <State is="menu.insuranceOptions.carrierSelection.*">
             <InsuranceList list={carriers} onSelect={this.selectCarrier} />
           </State>
           <State is="menu.insuranceOptions.planSelection.*">
-            <InsuranceList list={carriers} onSelect={() => {}} />
+            <InsuranceList list={plans} onSelect={this.selectPlan} />
           </State>
           <State is="menu.insuranceOptions.resetInsuranceQuestion.*">
             Do you want to choose your insurance again?
           </State>
         </State>
+
         <div className="debug">
+          STATE MACHINE
           <pre>{JSON.stringify(this.props.machineState.value, null, 2)}</pre>
+          COMPONENT STATE
+          <pre>{JSON.stringify(this.state, null, 2)}</pre>
         </div>
       </div>
     );
