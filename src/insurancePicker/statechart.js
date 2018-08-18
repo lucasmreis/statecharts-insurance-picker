@@ -1,4 +1,5 @@
 export const statechart = {
+  key: "insurancePicker",
   parallel: true,
   states: {
     input: {

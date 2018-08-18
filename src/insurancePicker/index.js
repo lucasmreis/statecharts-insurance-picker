@@ -1,8 +1,8 @@
 import React from "react";
-import { withStateMachine } from "react-automata";
+import { withStateMachine, State } from "react-automata";
 
 import { statechart } from "./statechart";
-import { fetchCarriers } from "./fetchInsuranceData";
+import { fetchCarriers, fetchPlans } from "./fetchInsuranceData";
 import { InsuranceList } from "./InsuranceList";
 
 class Container extends React.Component {
@@ -20,6 +20,15 @@ class Container extends React.Component {
       .catch(() => this.props.transition("FETCH_CARRIERS_ERROR"));
   }
 
+  fetchPlans() {
+    // fetchPlans(this.state.selectedCarrier);
+  }
+
+  selectCarrier = selectedCarrier => {
+    this.setState({ selectedCarrier });
+    this.props.transition("CARRIER_SELECTED");
+  };
+
   render() {
     const { carriers, selectedCarrier, selectedPlan } = this.state;
 
@@ -29,8 +38,21 @@ class Container extends React.Component {
 
     return (
       <div>
-        <input value={selectedInsurance} />
-        <InsuranceList list={carriers} onSelect={() => {}} />
+        <input
+          value={selectedInsurance}
+          onClick={() => this.props.transition("INPUT_CLICKED")}
+        />
+        <State is="menu.visibility.shown">
+          <State is="menu.insuranceOptions.carrierSelection.*">
+            <InsuranceList list={carriers} onSelect={this.selectCarrier} />
+          </State>
+          <State is="menu.insuranceOptions.planSelection.*">
+            <InsuranceList list={carriers} onSelect={() => {}} />
+          </State>
+          <State is="menu.insuranceOptions.resetInsuranceQuestion.*">
+            Do you want to choose your insurance again?
+          </State>
+        </State>
         <div className="debug">
           <pre>{JSON.stringify(this.props.machineState.value, null, 2)}</pre>
         </div>
