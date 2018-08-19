@@ -47,7 +47,7 @@ export const statechart = {
                 },
                 loadingCarriersError: {
                   on: {
-                    TRY_FETCHING_CARRIERS_AGAIN: "loadingCarriers"
+                    TRY_FETCHING_CARRIERS_AGAIN: "loading"
                   }
                 },
                 carriersList: {}
@@ -66,7 +66,7 @@ export const statechart = {
                 },
                 loadingPlansError: {
                   on: {
-                    TRY_FETCHING_PLANS_AGAIN: "loadingPlans"
+                    TRY_FETCHING_PLANS_AGAIN: "loading"
                   }
                 },
                 plansList: {}
