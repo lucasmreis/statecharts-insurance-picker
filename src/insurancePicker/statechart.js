@@ -6,16 +6,14 @@ export const statechart = {
       initial: "empty",
       states: {
         empty: {
-          on: {
-            CARRIER_SELECTED: "showingCarrier"
-          }
+          on: { CARRIER_SELECTED: "showingCarrier" }
         },
         showingCarrier: {
-          on: {
-            PLAN_SELECTED: "showingCarrierAndPlan"
-          }
+          on: { PLAN_SELECTED: "showingCarrierAndPlan" }
         },
-        showingCarrierAndPlan: {}
+        showingCarrierAndPlan: {
+          on: { RESET: "empty" }
+        }
       }
     },
     menu: {
@@ -24,11 +22,7 @@ export const statechart = {
         visibility: {
           initial: "hidden",
           states: {
-            hidden: {
-              on: {
-                INPUT_CLICKED: "shown"
-              }
-            },
+            hidden: { on: { INPUT_CLICKED: "shown" } },
             shown: {
               on: {
                 CLICKED_OUTSIDE: "hidden",
@@ -42,12 +36,10 @@ export const statechart = {
           states: {
             carrierSelection: {
               onEntry: "fetchCarriers",
-              on: {
-                CARRIER_SELECTED: "planSelection"
-              },
-              initial: "loadingCarriers",
+              on: { CARRIER_SELECTED: "planSelection" },
+              initial: "loading",
               states: {
-                loadingCarriers: {
+                loading: {
                   on: {
                     CARRIERS_FETCHED: "carriersList",
                     FETCH_CARRIERS_ERROR: "loadingCarriersError"
@@ -63,12 +55,10 @@ export const statechart = {
             },
             planSelection: {
               onEntry: "fetchPlans",
-              on: {
-                PLAN_SELECTED: "resetInsuranceQuestion"
-              },
-              initial: "loadingPlans",
+              on: { PLAN_SELECTED: "resetInsuranceQuestion" },
+              initial: "loading",
               states: {
-                loadingPlans: {
+                loading: {
                   on: {
                     PLANS_FETCHED: "plansList",
                     FETCH_PLANS_ERROR: "loadingPlansError"
@@ -82,7 +72,9 @@ export const statechart = {
                 plansList: {}
               }
             },
-            resetInsuranceQuestion: {}
+            resetInsuranceQuestion: {
+              on: { RESET: "carrierSelection" }
+            }
           }
         }
       }

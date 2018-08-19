@@ -4,6 +4,8 @@ import { withStateMachine, State } from "react-automata";
 import { statechart } from "./statechart";
 import { fetchCarriers, fetchPlans } from "./fetchInsuranceData";
 import { InsuranceList } from "./InsuranceList";
+import { Loading } from "./Loading";
+import { ResetInsuranceQuestion } from "./ResetInsuranceQuestion";
 
 class Container extends React.Component {
   state = {
@@ -37,6 +39,16 @@ class Container extends React.Component {
     this.props.transition("PLAN_SELECTED");
   };
 
+  reset = () => {
+    this.setState({
+      selectedCarrier: null,
+      selectedPlan: null,
+      carriers: [],
+      plans: []
+    });
+    this.props.transition("RESET");
+  };
+
   render() {
     const { carriers, plans, selectedCarrier, selectedPlan } = this.state;
 
@@ -45,30 +57,30 @@ class Container extends React.Component {
       .join(", ");
 
     return (
-      <div>
+      <div className="container">
         <input
           value={selectedInsurance}
           onClick={() => this.props.transition("INPUT_CLICKED")}
         />
 
         <State is="menu.visibility.shown">
+          <div
+            className="takeover"
+            onClick={() => this.props.transition("CLICKED_OUTSIDE")}
+          />
+          <State is="menu.insuranceOptions.*.loading">
+            <Loading />
+          </State>
           <State is="menu.insuranceOptions.carrierSelection.*">
             <InsuranceList list={carriers} onSelect={this.selectCarrier} />
           </State>
           <State is="menu.insuranceOptions.planSelection.*">
             <InsuranceList list={plans} onSelect={this.selectPlan} />
           </State>
-          <State is="menu.insuranceOptions.resetInsuranceQuestion.*">
-            Do you want to choose your insurance again?
+          <State is="menu.insuranceOptions.resetInsuranceQuestion">
+            <ResetInsuranceQuestion onReset={this.reset} />
           </State>
         </State>
-
-        <div className="debug">
-          STATE MACHINE
-          <pre>{JSON.stringify(this.props.machineState.value, null, 2)}</pre>
-          COMPONENT STATE
-          <pre>{JSON.stringify(this.state, null, 2)}</pre>
-        </div>
       </div>
     );
   }

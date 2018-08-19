@@ -1,6 +1,50 @@
 .App {
   font-family: sans-serif;
-  text-align: center;
+  padding: 0 10px;
+  color: rgb(0, 45, 75);
+}
+
+.container {
+  position: relative;
+}
+
+input {
+  width: 50%;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.takeover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.dropdown {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: translateY(100%);
+  background-color: white;
+  border: 1px solid rgb(0, 45, 75);
+}
+
+.dropdown-item {
+  padding: 15px;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: rgb(255, 236, 241);
+}
+
+a {
+  text-decoration: none;
+  color: currentColor;
 }
 
 .debug {
